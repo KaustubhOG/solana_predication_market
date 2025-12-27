@@ -1,5 +1,22 @@
 {
+  "name": "solana_predication_market",
+  "version": "1.0.0",
+  "description": "A simple prediction market on Solana where users bet on outcomes and winners claim rewards after the result is decided.",
+  "homepage": "https://github.com/KaustubhOG/solana_predication_market#readme",
+  "bugs": {
+    "url": "https://github.com/KaustubhOG/solana_predication_market/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KaustubhOG/solana_predication_market.git"
+  },
   "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
   "scripts": {
     "lint:fix": "prettier */*.js \"*/**/*{.js,.ts}\" -w",
     "lint": "prettier */*.js \"*/**/*{.js,.ts}\" --check"
