@@ -10,19 +10,19 @@ pub mod prediction_market {
         Ok(())
     }
 
-    pub fn place_bet() -> Result<()> {
+    pub fn split_tokens() -> Result<()> {
         Ok(())
     }
 
-    pub fn settle_market() -> Result<()> {
+    pub fn merge_tokens() -> Result<()> {
         Ok(())
     }
 
-    pub fn claim_reward() -> Result<()> {
+    pub fn set_winning_side() -> Result<()> {
         Ok(())
     }
 
-    pub fn cancel_market() -> Result<()> {
+    pub fn claim_rewards() -> Result<()> {
         Ok(())
     }
 }
