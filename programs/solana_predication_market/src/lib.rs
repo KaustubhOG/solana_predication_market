@@ -17,15 +17,15 @@ pub mod prediction_market {
         market_id: u32,
         settlement_deadline: i64,
     ) -> Result<()> {
-        initialize_market::handler(ctx, market_id, settlement_deadline)
+        instructions::initialize_market::handle(ctx, market_id, settlement_deadline)
     }
 
     pub fn split_tokens(ctx: Context<SplitToken>, market_id: u32, amount: u64) -> Result<()> {
-        split_tokens::handler(ctx, market_id, amount)
+        instructions::split_tokens::handle(ctx, market_id, amount)
     }
 
     pub fn merge_tokens(ctx: Context<MergeToken>, market_id: u32) -> Result<()> {
-        merge_tokens::handler(ctx, market_id)
+        instructions::merge_tokens::handle(ctx, market_id)
     }
 
     pub fn set_winning_side(
@@ -33,10 +33,10 @@ pub mod prediction_market {
         market_id: u32,
         winner: state::WinningOutcome,
     ) -> Result<()> {
-        set_winning_side::handler(ctx, market_id, winner)
+        instructions::set_winning_side::handle(ctx, market_id, winner)
     }
 
     pub fn claim_rewards(ctx: Context<ClaimRewards>, market_id: u32) -> Result<()> {
-        claim_rewards::handler(ctx, market_id)
+        instructions::claim_rewards::handle(ctx, market_id)
     }
 }
