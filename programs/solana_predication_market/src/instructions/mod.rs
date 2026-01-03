@@ -9,4 +9,4 @@ pub use initialize_market::InitializeMarket;
 pub use split_tokens::SplitToken;
 pub use merge_tokens::MergeToken;
 pub use set_winning_side::SetWinner;
-pub use claim_rewards::ClaimRewards;
+pub use claim_rewards::*;

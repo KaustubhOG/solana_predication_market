@@ -59,9 +59,9 @@ pub struct ClaimRewards<'info> {
     pub token_program: Program<'info, Token>,
 }
 
-pub fn handler(
+pub fn handle(
     ctx: Context<ClaimRewards>,
-    market_id: u32,
+    _market_id: u32,
 ) -> Result<()> {
     let market = &mut ctx.accounts.market;
 
@@ -98,11 +98,12 @@ pub fn handler(
     )?;
     
     let market_id_bytes = market.market_id.to_le_bytes();
-    let seeds = &[
+    let seeds: &[&[u8]] = &[
         b"market",
         market_id_bytes.as_ref(),
         &[market.bump],
     ];
+    let signer_seeds = &[seeds];
     
     // Transfer collateral to user
     token::transfer(
@@ -113,7 +114,7 @@ pub fn handler(
                 to: ctx.accounts.user_collateral.to_account_info(),
                 authority: market.to_account_info(),
             },
-            &[seeds],
+            signer_seeds,
         ),
         amount,
     )?;

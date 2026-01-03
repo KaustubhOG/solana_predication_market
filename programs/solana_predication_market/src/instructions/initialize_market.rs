@@ -55,9 +55,9 @@ pub struct InitializeMarket<'info> {
     pub rent: Sysvar<'info, Rent>,
 }
 
-pub fn handler(
+pub fn handle(
     ctx: Context<InitializeMarket>,
-    market_id: u32,
+    _market_id: u32,
     settlement_deadline: i64,
 ) -> Result<()> {
     let market = &mut ctx.accounts.market;

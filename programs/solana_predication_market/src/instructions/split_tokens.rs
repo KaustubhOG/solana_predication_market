@@ -59,9 +59,9 @@ pub struct SplitToken<'info> {
     pub token_program: Program<'info, Token>,
 }
 
-pub fn handler(
+pub fn handle(
     ctx: Context<SplitToken>,
-    market_id: u32,
+    _market_id: u32,
     amount: u64,
 ) -> Result<()> {
     let market = &mut ctx.accounts.market;
@@ -87,12 +87,12 @@ pub fn handler(
     )?;
     
     let market_id_bytes = market.market_id.to_le_bytes();
-    let seeds = &[
+    let seeds: &[&[u8]] = &[
         b"market",
         market_id_bytes.as_ref(),
         &[market.bump],
     ];
-    let signer = &[&seeds[..]];
+    let signer = &[seeds];
     
     // Mint outcome A tokens
     token::mint_to(

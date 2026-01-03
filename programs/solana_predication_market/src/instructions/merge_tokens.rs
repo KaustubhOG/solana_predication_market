@@ -59,9 +59,9 @@ pub struct MergeToken<'info> {
     pub token_program: Program<'info, Token>,
 }
 
-pub fn handler(
+pub fn handle(
     ctx: Context<MergeToken>,
-    market_id: u32,
+    _market_id: u32,
 ) -> Result<()> {
     let market = &mut ctx.accounts.market;
 
