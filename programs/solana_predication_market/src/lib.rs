@@ -1,10 +1,10 @@
 use anchor_lang::prelude::*;
 
-pub mod instruction;
-pub mod state;
 pub mod error;
+pub mod instructions;
+pub mod state;
 
-use instruction::*;
+use instructions::*;
 
 declare_id!("J3kZR7H8pqE67JELXpq4BRP7Ws7JWDCvxHE5UwVZyw2L");
 
@@ -20,18 +20,11 @@ pub mod prediction_market {
         initialize_market::handler(ctx, market_id, settlement_deadline)
     }
 
-    pub fn split_tokens(
-        ctx: Context<SplitToken>,
-        market_id: u32,
-        amount: u64,
-    ) -> Result<()> {
+    pub fn split_tokens(ctx: Context<SplitToken>, market_id: u32, amount: u64) -> Result<()> {
         split_tokens::handler(ctx, market_id, amount)
     }
 
-    pub fn merge_tokens(
-        ctx: Context<MergeToken>,
-        market_id: u32,
-    ) -> Result<()> {
+    pub fn merge_tokens(ctx: Context<MergeToken>, market_id: u32) -> Result<()> {
         merge_tokens::handler(ctx, market_id)
     }
 
@@ -43,10 +36,7 @@ pub mod prediction_market {
         set_winning_side::handler(ctx, market_id, winner)
     }
 
-    pub fn claim_rewards(
-        ctx: Context<ClaimRewards>,
-        market_id: u32,
-    ) -> Result<()> {
+    pub fn claim_rewards(ctx: Context<ClaimRewards>, market_id: u32) -> Result<()> {
         claim_rewards::handler(ctx, market_id)
     }
 }
