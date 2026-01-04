@@ -1,7 +1,7 @@
 {
   "name": "solana_predication_market",
   "version": "1.0.0",
-  "description": "A simple prediction market on Solana where users bet on outcomes and winners claim rewards after the result is decided.",
+  "description": "A simple predication market on Solana where users bet on outcomes and winners claim rewards after the result is decided.",
   "homepage": "https://github.com/KaustubhOG/solana_predication_market#readme",
   "bugs": {
     "url": "https://github.com/KaustubhOG/solana_predication_market/issues"

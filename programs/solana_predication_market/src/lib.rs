@@ -1,17 +1,19 @@
 use anchor_lang::prelude::*;
 
 pub mod error;
-pub mod instructions;
 pub mod state;
+pub mod instructions;
+
+use instructions::*;
 
 declare_id!("J3kZR7H8pqE67JELXpq4BRP7Ws7JWDCvxHE5UwVZyw2L");
 
 #[program]
-pub mod prediction_market {
+pub mod solana_predication_market {
     use super::*;
 
     pub fn initialize_market(
-        ctx: Context<instructions::InitializeMarket>,
+        ctx: Context<InitializeMarket>,
         market_id: u32,
         settlement_deadline: i64,
     ) -> Result<()> {
@@ -19,7 +21,7 @@ pub mod prediction_market {
     }
 
     pub fn split_tokens(
-        ctx: Context<instructions::SplitToken>,
+        ctx: Context<SplitToken>,
         market_id: u32,
         amount: u64,
     ) -> Result<()> {
@@ -27,14 +29,14 @@ pub mod prediction_market {
     }
 
     pub fn merge_tokens(
-        ctx: Context<instructions::MergeToken>,
+        ctx: Context<MergeToken>,
         market_id: u32,
     ) -> Result<()> {
         instructions::merge_tokens::handle(ctx, market_id)
     }
 
     pub fn set_winning_side(
-        ctx: Context<instructions::SetWinner>,
+        ctx: Context<SetWinner>,
         market_id: u32,
         winner: state::WinningOutcome,
     ) -> Result<()> {
@@ -42,7 +44,7 @@ pub mod prediction_market {
     }
 
     pub fn claim_rewards(
-        ctx: Context<instructions::ClaimRewards>,
+        ctx: Context<ClaimRewards>,
         market_id: u32,
     ) -> Result<()> {
         instructions::claim_rewards::handle(ctx, market_id)

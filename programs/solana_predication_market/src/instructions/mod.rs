@@ -4,9 +4,9 @@ pub mod merge_tokens;
 pub mod set_winning_side;
 pub mod claim_rewards;
 
-// Only re-export the structs, not everything
-pub use initialize_market::InitializeMarket;
-pub use split_tokens::SplitToken;
-pub use merge_tokens::MergeToken;
-pub use set_winning_side::SetWinner;
+// Re-export both structs AND handler functions
+pub use initialize_market::*;
+pub use split_tokens::*;
+pub use merge_tokens::*;
+pub use set_winning_side::*;
 pub use claim_rewards::*;

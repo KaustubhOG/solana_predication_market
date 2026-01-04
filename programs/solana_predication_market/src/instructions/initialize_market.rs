@@ -57,7 +57,7 @@ pub struct InitializeMarket<'info> {
 
 pub fn handle(
     ctx: Context<InitializeMarket>,
-    _market_id: u32,
+    market_id: u32,
     settlement_deadline: i64,
 ) -> Result<()> {
     let market = &mut ctx.accounts.market;
