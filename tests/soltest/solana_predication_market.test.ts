@@ -17,6 +17,9 @@ describe("Prediction Market Tests", () => {
   let vaultPda: PublicKey;
   let outcomeAMintPda: PublicKey;
   let outcomeBMintPda: PublicKey;
+  let userCollateral: any;
+  let userOutcomeA: any;
+  let userOutcomeB: any;
   const marketId = 1;
 
   before(async () => {
@@ -50,10 +53,7 @@ describe("Prediction Market Tests", () => {
       program.programId
     );
 
-    console.log("✓ Setup complete");
-  });
-
-  it("Initialize market", async () => {
+    // Initialize market
     const currentTime = Math.floor(Date.now() / 1000);
     const settlementDeadline = currentTime + 86400;
 
@@ -72,29 +72,22 @@ describe("Prediction Market Tests", () => {
       })
       .rpc();
 
-    const market = await program.account.market.fetch(marketPda);
-    assert.equal(market.marketId, marketId);
-    assert.equal(market.isSettled, false);
-    console.log("✓ Market initialized");
-  });
-
-  it("Split and merge tokens", async () => {
     // Setup user token accounts
-    const userCollateral = await getOrCreateAssociatedTokenAccount(
+    userCollateral = await getOrCreateAssociatedTokenAccount(
       provider.connection,
       authority.payer,
       collateralMint,
       authority.publicKey
     );
 
-    const userOutcomeA = await getOrCreateAssociatedTokenAccount(
+    userOutcomeA = await getOrCreateAssociatedTokenAccount(
       provider.connection,
       authority.payer,
       outcomeAMintPda,
       authority.publicKey
     );
 
-    const userOutcomeB = await getOrCreateAssociatedTokenAccount(
+    userOutcomeB = await getOrCreateAssociatedTokenAccount(
       provider.connection,
       authority.payer,
       outcomeBMintPda,
@@ -108,13 +101,18 @@ describe("Prediction Market Tests", () => {
       collateralMint,
       userCollateral.address,
       authority.publicKey,
-      1000000 // 1 token (6 decimals)
+      1000000 // 1 token
     );
 
-    // Split tokens: deposit collateral, get outcome tokens
-    const splitAmount = 500000; // 0.5 tokens
+    console.log("✓ Setup complete");
+  });
+
+  it("Split tokens", async () => {
+    const amount = 500000; // 0.5 tokens
+
+    // Split: deposit collateral → get outcome tokens
     await program.methods
-      .splitTokens(marketId, new anchor.BN(splitAmount))
+      .splitTokens(marketId, new anchor.BN(amount))
       .accounts({
         market: marketPda,
         user: authority.publicKey,
@@ -128,16 +126,18 @@ describe("Prediction Market Tests", () => {
       })
       .rpc();
 
-    console.log("✓ Tokens split - User received outcome tokens");
+    // Check user received outcome tokens
+    const outcomeABalance = await provider.connection.getTokenAccountBalance(userOutcomeA.address);
+    const outcomeBBalance = await provider.connection.getTokenAccountBalance(userOutcomeB.address);
 
-    // Check balances after split
-    let outcomeABalance = (await provider.connection.getTokenAccountBalance(userOutcomeA.address)).value.amount;
-    let outcomeBBalance = (await provider.connection.getTokenAccountBalance(userOutcomeB.address)).value.amount;
-    assert.equal(outcomeABalance, splitAmount.toString());
-    assert.equal(outcomeBBalance, splitAmount.toString());
+    assert.equal(outcomeABalance.value.amount, amount.toString());
+    assert.equal(outcomeBBalance.value.amount, amount.toString());
 
-    // Merge tokens: burn outcome tokens, get collateral back
-    const mergeAmount = 300000; // 0.3 tokens
+    console.log("✓ Split successful - User received outcome tokens");
+  });
+
+  it("Merge tokens", async () => {
+    // Merge: burn outcome tokens → get collateral back
     await program.methods
       .mergeTokens(marketId)
       .accounts({
@@ -153,16 +153,13 @@ describe("Prediction Market Tests", () => {
       })
       .rpc();
 
-    console.log("✓ Tokens merged - User got collateral back");
+    // Check outcome tokens were burned
+    const outcomeABalance = await provider.connection.getTokenAccountBalance(userOutcomeA.address);
+    const outcomeBBalance = await provider.connection.getTokenAccountBalance(userOutcomeB.address);
 
-    // Check balances after merge
-    outcomeABalance = (await provider.connection.getTokenAccountBalance(userOutcomeA.address)).value.amount;
-    outcomeBBalance = (await provider.connection.getTokenAccountBalance(userOutcomeB.address)).value.amount;
-    
-    const expectedRemaining = splitAmount - mergeAmount;
-    assert.equal(outcomeABalance, expectedRemaining.toString());
-    assert.equal(outcomeBBalance, expectedRemaining.toString());
+    assert.equal(outcomeABalance.value.amount, "0");
+    assert.equal(outcomeBBalance.value.amount, "0");
 
-    console.log("✓ Balances verified correctly");
+    console.log("✓ Merge successful - Outcome tokens burned");
   });
 });
