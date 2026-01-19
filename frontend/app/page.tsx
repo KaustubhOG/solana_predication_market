@@ -1,4 +1,3 @@
-export default function home(){
-  return <div>everything is working</div>;
+export default function home() {
+  return <div>this is landing page</div>;
 }
-
